@@ -20,13 +20,26 @@ Copy all lines in `colorPicker.js`, then paste it on the top of your code.
 
 ## Usage
 The key-word `new` is required to get an instance of colorPicker.  
+
+#### Simple as pie usage
+Just pick a color with no input.  
+
+```
+var resultColorArr = new colorPicker();
+resultColorArr;
+//The rgb Array you picked,from [0,0,0] to [1,1,1];
+```
+
+#### Input a color usage
+If you input a rgb array,ColorPicker will not only return the color you picked up,but also change the origin color.  
+
 ```
 var colorArr = [0.5,0.5,0.5];
 var resultColorArr = new colorPicker(colorArr);  
 resultColorArr;
-//[0.6,1.0,0.6078431372549]
+//The rgb Array you picked up,from [0,0,0] to [1,1,1];
 colorArr;
-//[0.6,1.0,0.6078431372549]
+//The same rgb Array with resultColorArr
 ```
 
 ## Tips
