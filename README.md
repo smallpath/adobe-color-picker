@@ -1,10 +1,12 @@
 # AdobeColorPicker
 This is a rebuilt color picker for Adobe scripting.  
-Supporting all Adobe software such as PS,AI,AE,PR and so on.  
+Supporting all Adobe softwares such as PS,AI,AE,PR and so on.  
+
+![AE](https://raw.githubusercontent.com/Smallpath/AdobeColorPicker/master/_screenshot/AE.png)
 
 ## Installation
 Download the latest release.
-You can import ColorPicker to your script in two ways:
+You can import ColorPicker to your script in following two ways:
 
 #### Use include (Suggested)
 To use `#include`,you should specific the path to the `colorPicker.js`  
@@ -36,11 +38,11 @@ colorArr;
 
 ## Screenshot
 #### PS
-
+>[PS](https://raw.githubusercontent.com/Smallpath/AdobeColorPicker/master/_screenshot/PS.png)
 #### AI
+>[AI](https://raw.githubusercontent.com/Smallpath/AdobeColorPicker/master/_screenshot/AI.png)
 
-
-See all screenshots [here]()
+See all screenshots [here](https://github.com/Smallpath/AdobeColorPicker/tree/master/_screenshot)
 
 ## Changelog
 #### v1.0
