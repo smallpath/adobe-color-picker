@@ -29,6 +29,10 @@ colorArr;
 //[0.6,1.0,0.6078431372549]
 ```
 
+## Tips
+The 4 editable text areas have shotcut keys:  
+press `↑` and `↓` to add/sub 1 , while with `Shift` to add/sub 10
+
 ## Options
 - Options are specified by `new colorPicker(colorArr)`
 
