@@ -1,6 +1,6 @@
 # AdobeColorPicker
 This is a rebuilt color picker for Adobe scripting.  
-Supporting all Adobe softwares such as PS,AI,AE,PR and so on.  
+Supporting all Adobe softwares such as PS,AI,AE and so on.  
 
 ![AE](https://raw.githubusercontent.com/Smallpath/AdobeColorPicker/master/_screenshot/AE.png)
 
