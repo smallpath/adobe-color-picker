@@ -22,7 +22,7 @@ Copy all lines in `colorPicker.js`, then paste them on the top of your code.
 The key-word `new` is required to get the color from an instance of colorPicker.  
 
 #### Simple as pie usage
-Just pick up a color with no input.  
+Just pick up a color.  
 
 ```
 var resultColor = new colorPicker();
@@ -34,17 +34,17 @@ resultColor;
 If you input a color,ColorPicker will not only return the color you picked up,but also change the origin color.    
 
 ```
-var colorArr = [0.5,0.5,0.5];
-var resultColorArr = new colorPicker(colorArr);  
-resultColorArr;
+var color = [0.5,0.5,0.5];
+var resultColor = new colorPicker(color);  
+resultColor;
 //The rgb Array you picked up,from [0,0,0] to [1,1,1];
-colorArr;
+color;
 //The value of origin color has been changed to the result color;
 ```
 
 ## Tip
 The 4 editable text areas have shotcut keys:  
-press `↑` and `↓` to add/sub 1 , while with `Shift` to add/sub 10
+press `↑` and `↓` to add/sub 1 , while with `Shift` to add/sub 10.
 
 ## Option
 - Option is specified by `new colorPicker(colorArr)`  
@@ -61,7 +61,7 @@ press `↑` and `↓` to add/sub 1 , while with `Shift` to add/sub 10
 >[AI](https://raw.githubusercontent.com/Smallpath/AdobeColorPicker/master/_screenshot/AI.png)
 
 #### AE
->[AE2](https://raw.githubusercontent.com/Smallpath/AdobeColorPicker/master/_screenshot/AI.png)
+>[AE](https://raw.githubusercontent.com/Smallpath/AdobeColorPicker/master/_screenshot/AE.png)
 
 #### ESTK
 >[ESTK](https://raw.githubusercontent.com/Smallpath/AdobeColorPicker/master/_screenshot/ESTK.png)
