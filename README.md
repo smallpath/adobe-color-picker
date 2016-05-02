@@ -67,6 +67,10 @@ press `↑` and `↓` to add/sub 1 , while with `Shift` to add/sub 10.
 >[ESTK](https://raw.githubusercontent.com/Smallpath/AdobeColorPicker/master/_screenshot/ESTK.png)
 
 ## Changelog
+#### v1.1
+- Reduce 33% size of colorPicker
+- Enable process for mouse-move when left mouse is pressed
+
 #### v1.0
 - First release
 - Add support for all Adobe softwares 
