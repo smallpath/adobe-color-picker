@@ -20,22 +20,15 @@ if(typeof ColorPickerResource == "undefined"){
 }
 
 function colorPicker(inputValue){
-    this.userColour = inputValue || [0.5,0.5,0.5];
-    this.outputColour = [-1,-1,-1];
+    if(!(this instanceof colorPicker))
+        return new colorPicker(inputValue)
+    this.userColour = inputValue || [1,1,1];
+    this.outputColour = [1,1,1];
     this.initSetting();
     return this.showColorPicker();
 }
 
-function arraysEqual(a, b) {
-  if (a === b) return true;
-  if (a == null || b == null) return false;
-  if (a.length != b.length) return false;
 
-  for (var i = 0; i < a.length; ++i) {
-    if (a[i] !== b[i]) return false;
-  }
-  return true;
-}
 
 colorPicker.prototype.showColorPicker = colorPicker.prototype.showColorPicker || function(){
         var win = this.initWindow();
@@ -45,7 +38,7 @@ colorPicker.prototype.showColorPicker = colorPicker.prototype.showColorPicker ||
 
 colorPicker.prototype.initWindow = colorPicker.prototype.initWindow || function(){
             var _this = this;
-            var win = new Window("dialog", "Color Picker v1.0", undefined, {
+            var win = new Window("dialog", "Color Picker v1.2", undefined, {
                 maximizeButton: false,
                 minimizeButton: false,
                 closeButton: false
@@ -71,7 +64,7 @@ colorPicker.prototype.initWindow = colorPicker.prototype.initWindow || function(
 		            colourSelectCursor.strokeColour = [0,0,0];
 
 		        	colourSelectCursor.onDraw = function () {
-		        		this.graphics.drawOSControl();
+		        	    this.graphics.drawOSControl();
 		                this.graphics.newPath();
 		                this.graphics.ellipsePath(this.strokeWidth/2,this.strokeWidth/2,this.size[0]-this.strokeWidth,this.size[1]-this.strokeWidth);
 		                this.graphics.strokePath(this.graphics.newPen(this.graphics.PenType.SOLID_COLOR, this.strokeColour, this.strokeWidth));
@@ -80,7 +73,7 @@ colorPicker.prototype.initWindow = colorPicker.prototype.initWindow || function(
             win.brightGroup = win.add("group");
             win.staticBright = win.brightGroup.add("statictext",undefined,"Bright:");
             win.editBright = win.brightGroup.add("edittext{text:'0',characters:3,justify:'center',active:1}");
-            win.slider = win.brightGroup.add("slider",undefined,50,0,100); win.slider.size = "width:160,height:20";
+            win.slider = win.brightGroup.add("slider",undefined,100,0,100); win.slider.size = "width:160,height:20";
             var pickerRes =
             """Group{orientation:'column',
                     gulu:Group{
@@ -94,15 +87,15 @@ colorPicker.prototype.initWindow = colorPicker.prototype.initWindow || function(
                             size:[80,25]
                         }
                     },
-                    colorHSL:Group{orientation:'row',
+                    colorHSB:Group{orientation:'row',
                         hGroup:Group{hRad:StaticText{text:"H:"},hValue:StaticText{characters:5,justify:"center",text:'0'}},
                         sGroup:Group{sRad:StaticText{text:"S:"},sValue:StaticText{characters:5,justify:"center",text:'0'}},
-                        lGroup:Group{lRad:StaticText{text:"B:"},lValue:StaticText{characters:5,justify:"center",text:'0'}},
+                        bGroup:Group{bRad:StaticText{text:"B:"},bValue:StaticText{characters:5,justify:"center",text:'0'}},
                     },
                     colorRGB:Group{orientation:'row',
                         rGroup:Group{rRad:StaticText{text:"R:"},rValue:EditText{characters:4,justify:"center",text:'0',_index:0}},
                         gGroup:Group{gRad:StaticText{text:"G:"},gValue:EditText{characters:4,justify:"center",text:'0',_index:1}},
-                        bGroup:Group{bRad:StaticText{text:"B:"},bValue:EditText{characters:4,justify:"center",text:'0'},_index:2},
+                        bGroup:Group{bRad:StaticText{text:"B:"},bValue:EditText{characters:4,justify:"center",text:'0',_index:2}},
                     },
                     oc:Group{
                         ok:Button{text:'Ok'},
@@ -127,15 +120,15 @@ colorPicker.prototype.initWindow = colorPicker.prototype.initWindow || function(
             };
 
 	        editor.oc.ok.onClick = function(){
-	            if (arraysEqual(_this.outputColour, [-1,-1,-1]))
+	            if (_this.arraysEqual(_this.outputColour, [-1,-1,-1]))
 	            	_this.copyArr(_this.outputColour, _this.preColor);
 
-                win.hide();
+                win.close();
             }
 
             editor.oc.can.onClick = function(){
                 _this.copyArr(_this.outputColour,_this.preColor);
-                win.hide();
+                win.close();
             }
 
             this.setDefaultValue(win, _this.preColor)
@@ -152,6 +145,7 @@ colorPicker.prototype.setDefaultValue = colorPicker.prototype.setDefaultValue ||
         var pi = win.editor;
         var startColour = defaultColour || this.outputColour;
 
+
         pi.gulu.uni.unicode.text= this.RgbToHex (startColour);
         pi.gulu.uni.unicode.active = true;
 
@@ -165,9 +159,9 @@ colorPicker.prototype.setDefaultValue = colorPicker.prototype.setDefaultValue ||
                                         Math.round(startColour[1]*255),
                                         Math.round(startColour[2]*255)
                                     ]);
-        pi.colorHSL.hGroup.hValue.text=hsbHere[0];
-        pi.colorHSL.sGroup.sValue.text=hsbHere[1];
-        pi.colorHSL.lGroup.lValue.text=hsbHere[2];
+        pi.colorHSB.hGroup.hValue.text=hsbHere[0];
+        pi.colorHSB.sGroup.sValue.text=hsbHere[1];
+        pi.colorHSB.bGroup.bValue.text=hsbHere[2];
         win.slider.value=hsbHere[2];
         win.editBright.text=hsbHere[2];
 
@@ -183,9 +177,11 @@ colorPicker.prototype.bindingHandler =  colorPicker.prototype.bindingHandler || 
            win.editor.colorRGB.gGroup.gValue.onChange =
            win.editor.colorRGB.bGroup.bValue.onChange = function (){
                     this.text=Math.round(this.text);
+
                     if( this.text<0 || this.text>255 || isNaN(this.text)==true ){
                             this.text=Math.round(_this.outputColour[0]*255);
                        }
+
                     if(this._index ==0)
                         win.editor.gulu.uni.unicode.text=_this.RgbToHex ([this.text/255,_this.outputColour[1],_this.outputColour[2]]);
                     else if(this._index ==1)
@@ -193,26 +189,25 @@ colorPicker.prototype.bindingHandler =  colorPicker.prototype.bindingHandler || 
                     else if(this._index ==2)
                         win.editor.gulu.uni.unicode.text=_this.RgbToHex ([_this.outputColour[0],_this.outputColour[1],this.text/255]);
                      win.editor.gulu.uni.unicode.notify("onChange");
-                     //win.editor.color.notify("onDraw");
                }
 
            win.slider.onChange = win.slider.onChanging = function(){
 
                     var thisColor= _this.HsbToRgb ([
-                                                            Math.round(win.editor.colorHSL.hGroup.hValue.text),
-                                                            Math.round(win.editor.colorHSL.sGroup.sValue.text),
+                                                            Math.round(win.editor.colorHSB.hGroup.hValue.text),
+                                                            Math.round(win.editor.colorHSB.sGroup.sValue.text),
                                                             Math.round(this.value)
                                                         ]);
                     _this.copyArr(_this.outputColour,[thisColor[0]/255,thisColor[1]/255,thisColor[2]/255]);
                     _this.setDefaultValue(win);
                     win.editor.gulu.color.notify("onDraw");
 
-                    if (arraysEqual(colourSelectCursor.strokeColour,[1,1,1])) {
+                    if (_this.arraysEqual(colourSelectCursor.strokeColour,[1,1,1])) {
                     	if (this.value > 63){
 	                    	colourSelectCursor.strokeColour = [0,0,0];
 	                    	colourSelectCursor.notify("onDraw");
                     	}
-                    } else if (arraysEqual(colourSelectCursor.strokeColour,[0,0,0])) {
+                    } else if (_this.arraysEqual(colourSelectCursor.strokeColour,[0,0,0])) {
                     	if (this.value <= 63) {
                     		colourSelectCursor.strokeColour = [1,1,1];
                     		colourSelectCursor.notify("onDraw");
@@ -292,6 +287,7 @@ colorPicker.prototype.bindingKeydown = colorPicker.prototype.bindingKeydown || f
         }
         var point = [k.clientX, k.clientY];
         if(!_this.isInCircle(point)) return;
+
 
         var thisColor = _this.getColorFromPoint(point);
         // DEBUG
@@ -496,6 +492,17 @@ colorPicker.prototype.initSetting = colorPicker.prototype.initSetting || functio
             this.settingFile.close();
             return isOk;
         }
+    
+    this.arraysEqual = function(a, b) {
+      if (a === b) return true;
+      if (a == null || b == null) return false;
+      if (a.length != b.length) return false;
+
+      for (var i = 0; i < a.length; ++i) {
+        if (a[i] !== b[i]) return false;
+      }
+      return true;
+    }
 
 }
     $.global.colorPicker = colorPicker;

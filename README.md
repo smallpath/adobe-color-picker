@@ -2,7 +2,7 @@
 This is a rebuilt color picker for Adobe scripting.  
 Supporting all Adobe softwares such as PS,AI,AE and so on.  
 
-![AE](https://raw.githubusercontent.com/Smallpath/AdobeColorPicker/master/_screenshot/AE.png)
+![AE](https://raw.githubusercontent.com/Smallpath/AdobeColorPicker/master/_screenshot/Animation.gif)
 
 ## Installation
 Download the latest release.  
@@ -18,28 +18,11 @@ To make production, don't miss the nice command `File->Export as binary` in ESTK
 #### Copy and paste
 Copy all lines in `colorPicker.js`, then paste them on the top of your code.  
 
-## Usage
-The key-word `new` is required to get the color from an instance of colorPicker.  
-
-#### Simple as pie usage
-Just pick up a color.  
-
+## Simple as pie usage
 ```
-var resultColor = new colorPicker();
+var resultColor = colorPicker();
 resultColor;
 //The rgb Array you picked up,from [0,0,0] to [1,1,1];
-```
-
-#### Input a color usage
-If you input a color,ColorPicker will not only return the color you picked up,but also change the origin color.    
-
-```
-var color = [0.5,0.5,0.5];
-var resultColor = new colorPicker(color);  
-resultColor;
-//The rgb Array you picked up,from [0,0,0] to [1,1,1];
-color;
-//The value of origin color has been changed to the result color;
 ```
 
 ## Tip
@@ -67,6 +50,13 @@ press `↑` and `↓` to add/sub 1 , while with `Shift` to add/sub 10.
 >[ESTK](https://raw.githubusercontent.com/Smallpath/AdobeColorPicker/master/_screenshot/ESTK.png)
 
 ## Changelog
+#### v1.2
+- No longer require the key-word 'new'
+- Add cursor
+- Better brightness control
+- Auto-highlights hex field on launch
+- Doesn't affect user's 'old colour' at all
+
 #### v1.1
 - Reduce 33% size of colorPicker
 - Enable process for mouse-move when left mouse is pressed
@@ -81,6 +71,10 @@ press `↑` and `↓` to add/sub 1 , while with `Shift` to add/sub 10.
 
 ## Contribution
 If you find a bug or want to contribute to the color picker,please submit an issue or send a pull request
+
+## Contributor
+smallpath  
+zlovatt
 
 ## License
 The MIT license
