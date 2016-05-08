@@ -94,16 +94,20 @@ colorPicker.prototype.initWindow = colorPicker.prototype.initWindow || function(
                             size:[80,25]
                         }
                     },
-                    colorHSL:Group{orientation:'row',
-                        hGroup:Group{hRad:StaticText{text:"H:"},hValue:StaticText{characters:5,justify:"center",text:'0'}},
-                        sGroup:Group{sRad:StaticText{text:"S:"},sValue:StaticText{characters:5,justify:"center",text:'0'}},
-                        lGroup:Group{lRad:StaticText{text:"B:"},lValue:StaticText{characters:5,justify:"center",text:'0'}},
-                    },
-                    colorRGB:Group{orientation:'row',
-                        rGroup:Group{rRad:StaticText{text:"R:"},rValue:EditText{characters:4,justify:"center",text:'0',_index:0}},
-                        gGroup:Group{gRad:StaticText{text:"G:"},gValue:EditText{characters:4,justify:"center",text:'0',_index:1}},
-                        bGroup:Group{bRad:StaticText{text:"B:"},bValue:EditText{characters:4,justify:"center",text:'0'},_index:2},
-                    },
+                    colorHolder:Group{orientation:'row',
+	                    colorCol1:Group{orientation:'column',
+	                    	hGroup:Group{hRad:StaticText{text:"H:"},hValue:StaticText{characters:5,justify:"center",text:'0'}},
+	                    	rGroup:Group{rRad:StaticText{text:"R:"},rValue:EditText{characters:4,justify:"center",text:'0',_index:0}}
+	                	},
+	                    colorCol2:Group{orientation:'column',
+	                    	sGroup:Group{sRad:StaticText{text:"S:"},sValue:StaticText{characters:5,justify:"center",text:'0'}},
+	                    	gGroup:Group{gRad:StaticText{text:"G:"},gValue:EditText{characters:4,justify:"center",text:'0',_index:1}}
+	                	},
+	                    colorCol3:Group{orientation:'column',
+	                    	lGroup:Group{lRad:StaticText{text:"B:"},lValue:StaticText{characters:5,justify:"center",text:'0'}},
+	                    	bGroup:Group{bRad:StaticText{text:"B:"},bValue:EditText{characters:4,justify:"center",text:'0'},_index:2}
+	                	},
+	                },
                     oc:Group{
                         ok:Button{text:'Ok'},
                         can:Button{text:'Cancel'}
@@ -157,17 +161,17 @@ colorPicker.prototype.setDefaultValue = colorPicker.prototype.setDefaultValue ||
 
 
 
-        pi.colorRGB.rGroup.rValue.text=Math.round(startColour[0]*255);
-        pi.colorRGB.gGroup.gValue.text=Math.round(startColour[1]*255);
-        pi.colorRGB.bGroup.bValue.text=Math.round(startColour[2]*255);
+        pi.colorHolder.colorCol1.rGroup.rValue.text=Math.round(startColour[0]*255);
+        pi.colorHolder.colorCol2.gGroup.gValue.text=Math.round(startColour[1]*255);
+        pi.colorHolder.colorCol3.bGroup.bValue.text=Math.round(startColour[2]*255);
         var hsbHere= this.RgbToHsb([
                                         Math.round(startColour[0]*255),
                                         Math.round(startColour[1]*255),
                                         Math.round(startColour[2]*255)
                                     ]);
-        pi.colorHSL.hGroup.hValue.text=hsbHere[0];
-        pi.colorHSL.sGroup.sValue.text=hsbHere[1];
-        pi.colorHSL.lGroup.lValue.text=hsbHere[2];
+        pi.colorHolder.colorCol1.hGroup.hValue.text=hsbHere[0];
+        pi.colorHolder.colorCol2.sGroup.sValue.text=hsbHere[1];
+        pi.colorHolder.colorCol3.lGroup.lValue.text=hsbHere[2];
         win.slider.value=hsbHere[2];
         win.editBright.text=hsbHere[2];
 
@@ -179,9 +183,9 @@ colorPicker.prototype.bindingHandler =  colorPicker.prototype.bindingHandler || 
            var _this = this;
 
 
-           win.editor.colorRGB.rGroup.rValue.onChange  =
-           win.editor.colorRGB.gGroup.gValue.onChange =
-           win.editor.colorRGB.bGroup.bValue.onChange = function (){
+           win.editor.colorHolder.colorCol1.rGroup.rValue.onChange  =
+           win.editor.colorHolder.colorCol2.gGroup.gValue.onChange =
+           win.editor.colorHolder.colorCol3.bGroup.bValue.onChange = function (){
                     this.text=Math.round(this.text);
                     if( this.text<0 || this.text>255 || isNaN(this.text)==true ){
                             this.text=Math.round(_this.outputColour[0]*255);
@@ -199,8 +203,8 @@ colorPicker.prototype.bindingHandler =  colorPicker.prototype.bindingHandler || 
            win.slider.onChange = win.slider.onChanging = function(){
 
                     var thisColor= _this.HsbToRgb ([
-                                                            Math.round(win.editor.colorHSL.hGroup.hValue.text),
-                                                            Math.round(win.editor.colorHSL.sGroup.sValue.text),
+                                                            Math.round(win.editor.colorHolder.colorCol1.hGroup.hValue.text),
+                                                            Math.round(win.editor.colorHolder.colorCol2.sGroup.sValue.text),
                                                             Math.round(this.value)
                                                         ]);
                     _this.copyArr(_this.outputColour,[thisColor[0]/255,thisColor[1]/255,thisColor[2]/255]);
@@ -262,9 +266,9 @@ colorPicker.prototype.bindingKeydown = colorPicker.prototype.bindingKeydown || f
             }
         }
       }
-    win.editor.colorRGB.rGroup.rValue.addEventListener('keydown', keyDownHandle1);
-    win.editor.colorRGB.gGroup.gValue.addEventListener('keydown', keyDownHandle1);
-    win.editor.colorRGB.bGroup.bValue.addEventListener('keydown', keyDownHandle1);
+    win.editor.colorHolder.colorCol1.rGroup.rValue.addEventListener('keydown', keyDownHandle1);
+    win.editor.colorHolder.colorCol2.gGroup.gValue.addEventListener('keydown', keyDownHandle1);
+    win.editor.colorHolder.colorCol3.bGroup.bValue.addEventListener('keydown', keyDownHandle1);
     win.editBright.addEventListener('keydown', keyDownHandle1);
 
 
