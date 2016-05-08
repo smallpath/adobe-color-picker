@@ -200,6 +200,18 @@ colorPicker.prototype.bindingHandler =  colorPicker.prototype.bindingHandler || 
                      //win.editor.color.notify("onDraw");
                }
 
+           win.editBright.onChange = win.editBright.onChanging = function () {
+           		if (this.text < 0)
+           			this.text = 0;
+           		if (this.text > 100)
+           			this.text = 100;
+           		if (isNaN(this.text)==true)
+           			this.text = 100;
+
+           		win.slider.value = parseInt(this.text);
+           		win.slider.notify('onChange');
+           };
+
            win.slider.onChange = win.slider.onChanging = function(){
 
                     var thisColor= _this.HsbToRgb ([
