@@ -69,12 +69,12 @@ press `↑` and `↓` to add/sub 1 , while with `Shift` to add/sub 10.
 #### v0.9
 - Add support for Adobe AfterEffects
 
+## Contributor
+[smallpath](https://github.com/Smallpath)  
+[zlovatt](https://github.com/zlovatt)
+
 ## Contribution
 If you find a bug or want to contribute to the color picker,please submit an issue or send a pull request
-
-## Contributor
-smallpath  
-zlovatt
 
 ## License
 The MIT license
