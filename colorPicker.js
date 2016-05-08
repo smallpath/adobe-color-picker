@@ -142,6 +142,8 @@ colorPicker.prototype.initWindow = colorPicker.prototype.initWindow || function(
                 win.hide();
             }
 
+        	_this.updateCursor(win);
+
             this.setDefaultValue(win, _this.preColor)
 
             this.bindingKeydown(win);
@@ -223,18 +225,8 @@ colorPicker.prototype.bindingHandler =  colorPicker.prototype.bindingHandler || 
                     _this.setDefaultValue(win);
                     win.editor.gulu.color.notify("onDraw");
 
-                    if (arraysEqual(colourSelectCursor.strokeColour,[1,1,1])) {
-                    	if (this.value > 63){
-	                    	colourSelectCursor.strokeColour = [0,0,0];
-	                    	colourSelectCursor.notify("onDraw");
-                    	}
-                    } else if (arraysEqual(colourSelectCursor.strokeColour,[0,0,0])) {
-                    	if (this.value <= 63) {
-                    		colourSelectCursor.strokeColour = [1,1,1];
-                    		colourSelectCursor.notify("onDraw");
-                    	}
-                    }
 
+                	_this.updateCursor(win);
                     colourCursorGroup.fillColour[3] = 1 - (this.value)/100;
                     colourCursorGroup.notify("onDraw");
                }
@@ -258,6 +250,18 @@ colorPicker.prototype.bindingHandler =  colorPicker.prototype.bindingHandler || 
 
 
 }
+
+colorPicker.prototype.updateCursor = colorPicker.prototype.updateCursor || function(win) {
+    if (arraysEqual(colourSelectCursor.strokeColour,[1,1,1])) {
+		if (win.slider.value > 63)
+	    	colourSelectCursor.strokeColour = [0,0,0];
+	} else if (arraysEqual(colourSelectCursor.strokeColour,[0,0,0])) {
+		if (win.slider.value <= 63)
+			colourSelectCursor.strokeColour = [1,1,1];
+	}
+
+	colourSelectCursor.notify("onDraw");
+};
 
 colorPicker.prototype.bindingKeydown = colorPicker.prototype.bindingKeydown || function(win){
     var _this = this;
