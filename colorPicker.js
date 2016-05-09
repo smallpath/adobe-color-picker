@@ -98,7 +98,7 @@ colorPicker.prototype.initWindow = colorPicker.prototype.initWindow || function(
 	                	},
 	                    colorCol3:Group{orientation:'column',
 	                    	lGroup:Group{lRad:StaticText{text:"B:"},lValue:StaticText{characters:5,justify:"center",text:'0'}},
-	                    	bGroup:Group{bRad:StaticText{text:"B:"},bValue:EditText{characters:4,justify:"center",text:'0'},_index:2}
+	                    	bGroup:Group{bRad:StaticText{text:"B:"},bValue:EditText{characters:4,justify:"center",text:'0',_index:2}}
 	                	},
 	                },
                     oc:Group{
@@ -330,10 +330,9 @@ colorPicker.prototype.bindingKeydown = colorPicker.prototype.bindingKeydown || f
 
 
     this.colourSelectCursor.addEventListener('mouseup', getColor)
-    this.colourCursorGroup.addEventListener('mouseup', getColor)
+    //this.colourCursorGroup.addEventListener('mouseup', getColor)
     this.colourCursorGroup.addEventListener ('mousemove',getColor)
     this.colourCursorGroup.addEventListener ('mousedown',getColor)
-
 }
 
 colorPicker.prototype.isInCircle = colorPicker.prototype.isInCircle || function(point){
