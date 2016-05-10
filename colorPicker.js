@@ -28,15 +28,13 @@ function colorPicker(inputValue){
     return this.showColorPicker();
 }
 
-
-
-colorPicker.prototype.showColorPicker = colorPicker.prototype.showColorPicker || function(){
+colorPicker.prototype.showColorPicker =  function(){
         var win = this.initWindow();
         win.show();
         return this.outputColour;
 }
 
-colorPicker.prototype.initWindow = colorPicker.prototype.initWindow || function(){
+colorPicker.prototype.initWindow = function(){
             var _this = this;
             var win = new Window("dialog", "Color Picker v1.2", undefined, {
                 maximizeButton: false,
@@ -147,7 +145,7 @@ colorPicker.prototype.initWindow = colorPicker.prototype.initWindow || function(
 
 }
 
-colorPicker.prototype.setDefaultValue = colorPicker.prototype.setDefaultValue || function(win, defaultColour){
+colorPicker.prototype.setDefaultValue = function(win, defaultColour){
         var pi = win.editor;
         var startColour = defaultColour || this.outputColour;
 
@@ -177,7 +175,7 @@ colorPicker.prototype.setDefaultValue = colorPicker.prototype.setDefaultValue ||
         this.colourCursorGroup.notify("onDraw");
 }
 
-colorPicker.prototype.bindingHandler =  colorPicker.prototype.bindingHandler || function(win){
+colorPicker.prototype.bindingHandler =  function(win){
            var _this = this;
 
 
@@ -247,7 +245,7 @@ colorPicker.prototype.bindingHandler =  colorPicker.prototype.bindingHandler || 
 
 }
 
-colorPicker.prototype.updateCursor = colorPicker.prototype.updateCursor || function(win) {
+colorPicker.prototype.updateCursor = function(win) {
     if (this.arraysEqual(this.colourSelectCursor.strokeColour,[1,1,1])) {
 		if (win.slider.value > 63)
 	    	this.colourSelectCursor.strokeColour = [0,0,0];
@@ -259,7 +257,7 @@ colorPicker.prototype.updateCursor = colorPicker.prototype.updateCursor || funct
 	this.colourSelectCursor.notify("onDraw");
 };
 
-colorPicker.prototype.bindingKeydown = colorPicker.prototype.bindingKeydown || function(win){
+colorPicker.prototype.bindingKeydown = function(win){
     var _this = this;
 
 
@@ -335,7 +333,7 @@ colorPicker.prototype.bindingKeydown = colorPicker.prototype.bindingKeydown || f
     this.colourCursorGroup.addEventListener ('mousedown',getColor)
 }
 
-colorPicker.prototype.isInCircle = colorPicker.prototype.isInCircle || function(point){
+colorPicker.prototype.isInCircle = function(point){
     return Math.pow (point[0]-130, 2) + Math.pow(point[1]-130,2) <= 16900
 }
 
@@ -410,19 +408,19 @@ colorPicker.prototype.CoreGetColorFromPoint = function(h,s){
     t =  1 - s * ( 1 - f );
     
     switch( i ) {
-        case 0:r = v;g = t;b = p;break;         //红色转移到橙色
-        case 1:r = v;g = 0.5+t/2;b = p;break;   //橙色转移到黄色
-        case 2:r = q;g = v;b = p;break;         //黄色转移到绿色
-        case 3:r = p;g = v;b = t;break;         //绿色转移到青色
-        case 4:r = p;g = q;b = v;break;         //青色专业到蓝色
-        case 5:r = t;g = p;b = v;break;         //蓝色转移到紫色
-        case 6:r = v;g = p;b = q;break;         //紫色转移到红色
+        case 0:r = v;g = t;b = p;break;        
+        case 1:r = v;g = 0.5+t/2;b = p;break;   
+        case 2:r = q;g = v;b = p;break;     
+        case 3:r = p;g = v;b = t;break;      
+        case 4:r = p;g = q;b = v;break;        
+        case 5:r = t;g = p;b = v;break;         
+        case 6:r = v;g = p;b = q;break;         
         
     }
     return [r,g,b];
 }
 
-colorPicker.prototype.copyArr =  colorPicker.prototype.copyArr || function(defaultArr,otherArr){
+colorPicker.prototype.copyArr =  function(defaultArr,otherArr){
     while(defaultArr.length!=0){
         defaultArr.pop();
     }
@@ -432,7 +430,7 @@ colorPicker.prototype.copyArr =  colorPicker.prototype.copyArr || function(defau
     return defaultArr;
 }
 
-colorPicker.prototype.HexToRgb =  colorPicker.prototype.HexToRgb || function(hex){
+colorPicker.prototype.HexToRgb =  function(hex){
             var ccolorhex = hex.toString(16);
             ccolorb = parseInt(ccolorhex.substr(-2), 16);
             ccolorg = parseInt(ccolorhex.substr(-4).substr(0, 2), 16);
@@ -440,7 +438,7 @@ colorPicker.prototype.HexToRgb =  colorPicker.prototype.HexToRgb || function(hex
             return [ccolorr / 255, ccolorg / 255, ccolorb / 255];
 }
 
-colorPicker.prototype.RgbToHex =  colorPicker.prototype.RgbToHex || function(rgb){
+colorPicker.prototype.RgbToHex =  function(rgb){
                 var a=(rgb[0]*255).toString(16);
                 var b=(rgb[1]*255).toString(16);
                 var c=(rgb[2]*255).toString(16);
@@ -456,7 +454,7 @@ colorPicker.prototype.RgbToHex =  colorPicker.prototype.RgbToHex || function(rgb
                 return (a+b+c).toUpperCase();
 }
 
-colorPicker.prototype.HsbToRgb = colorPicker.prototype.HsbToRgb || function(hsb){
+colorPicker.prototype.HsbToRgb =  function(hsb){
         var rgb = [];
         hsb = [hsb[0], hsb[1] / 100, hsb[2] / 100];
         for (var offset = 240, i = 0; i < 3; i++, offset -= 120) {
@@ -478,7 +476,7 @@ colorPicker.prototype.HsbToRgb = colorPicker.prototype.HsbToRgb || function(hsb)
         return [rgb[0], rgb[1], rgb[2]]
 }
 
-colorPicker.prototype.RgbToHsb = colorPicker.prototype.RgbToHsb || function(rgb){
+colorPicker.prototype.RgbToHsb = function(rgb){
         var hsb = [];
         var rearranged=[];
         for(var i=0;i<3;i++){
@@ -511,7 +509,7 @@ colorPicker.prototype.RgbToHsb = colorPicker.prototype.RgbToHsb || function(rgb)
         return [Math.round(hsb[0]), Math.round(hsb[1] * 100), Math.round(hsb[2] * 100)];
 }
 
-colorPicker.prototype.isHex = colorPicker.prototype.isHex ||  function(hexArr){
+colorPicker.prototype.isHex = function(hexArr){
     var arr = ["0","1","2","3","4","5","6","7","8","9","A","B","C","D","E","F"];
     var isHex = true;
     for(var i=0,len = hexArr.length;i<len;i++){
@@ -520,10 +518,11 @@ colorPicker.prototype.isHex = colorPicker.prototype.isHex ||  function(hexArr){
                     break;
                 }
         }
+
     return isHex;
 }
 
-colorPicker.prototype.initSetting = colorPicker.prototype.initSetting || function(){
+colorPicker.prototype.initSetting = function(){
     this.preColor = this.copyArr([],this.userColour);
     this.img = ColorPickerResource.img;
     this.colorCoreObj = ColorPickerResource.colorCoreObj;
