@@ -338,9 +338,7 @@ colorPicker.prototype.isInCircle = function(point){
 }
 
 colorPicker.prototype.getColorFromPoint =  function(point){
-    $.writeln(point)
     var transformedPoint = this.transformPoint(point);
-    $.writeln(transformedPoint)
     var hAndS =  this.getAngleAndLength(transformedPoint);
     return this.CoreGetColorFromPoint(hAndS[0],hAndS[1]);
 }
