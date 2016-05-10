@@ -518,7 +518,7 @@ colorPicker.prototype.isHex = function(hexArr){
                     break;
                 }
         }
-
+    if(hexArr.length != 6) return false;
     return isHex;
 }
 
