@@ -1,7 +1,7 @@
 ﻿;(function(){
 /*
- *  ColorPicker v1.1 for Adobe scripting.
- *  2016-4-23
+ *  ColorPicker v1.3 for Adobe scripting.
+ *  2016-5-10
  *
  *  By:   smallpath
  *  Email:   smallpath2013@gmail.com
@@ -36,7 +36,7 @@ colorPicker.prototype.showColorPicker =  function(){
 
 colorPicker.prototype.initWindow = function(){
             var _this = this;
-            var win = new Window("dialog", "Color Picker v1.2", undefined, {
+            var win = new Window("dialog", "Color Picker v1.3", undefined, {
                 maximizeButton: false,
                 minimizeButton: false,
                 closeButton: false
