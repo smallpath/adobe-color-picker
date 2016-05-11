@@ -16,48 +16,54 @@
 function colorPicker(inputValue){
     if(!(this instanceof colorPicker))
         return new colorPicker(inputValue)
-    this.userColour = this.parser(inputValue);
-    this.outputColour = [1,1,1];
     this.initSetting();
+    this.userColour = this.parseColor(inputValue);
+    this.outputColour = [1,1,1];
     return this.showColorPicker();
 }
 
-colorPicker.prototype.parser =  function(inputValue){
+colorPicker.prototype.parseColor =  function(inputValue){
         if(!inputValue)
             return [1,1,1];
+           
             
-        if(this.isRgb(inputValue))
+        if(this.isRgb(inputValue))                   //[0,0,0] - [1,1,1] 
             return this.parseRgb(inputValue);
-        else if(this.isHex(inputValue))
+        else if(this.isLargeRgb(inputValue))    //[0,0,0] - [255,255,255]
+            return this.parseLargeRgb(inputValue);
+        else if(this.isHex(inputValue) )            //FFFFFF
             return this.parseHex(inputValue);
-        else if(this.isHsb(inputValue))
+        else if(this.isShortHex(inputValue))     //FFF
+            return this.parseShortHex(inputValue);
+        else if(this.isHsb(inputValue))             //[0,0,0] - [360,100,100]
             return this.parseHsb(inputValue);
         else
             return [1,1,1];
 }
 
-colorPicker.prototype.isRgb =  function(){
 
+colorPicker.prototype.parseRgb =  function(inputValue){
+    return inputValue;
 }
 
-colorPicker.prototype.isHex =  function(){
-
+colorPicker.prototype.parseLargeRgb =  function(inputValue){
+    var arr = [inputValue[0]/255,inputValue[1]/255,inputValue[2]/255];
+    return arr;
 }
 
-colorPicker.prototype.isHsb =  function(){
-
+colorPicker.prototype.parseHex =  function(inputValue){
+    return this.HexToRgb("0x"+inputValue);
 }
 
-colorPicker.prototype.parseRgb =  function(){
-
+colorPicker.prototype.parseShortHex =  function(inputValue){
+    var hex = "0x"+inputValue[0].toString() + inputValue[0].toString() 
+                            +inputValue[1].toString() +inputValue[1].toString()
+                                +inputValue[2].toString() +inputValue[2].toString();
+    return this.HexToRgb(hex);
 }
 
-colorPicker.prototype.parseHex =  function(){
-
-}
-
-colorPicker.prototype.parseHsb =  function(){
-
+colorPicker.prototype.parseHsb =  function(inputValue){
+    return this.parseLargeRgb(this.HsbToRgb (inputValue));
 }
 
 colorPicker.prototype.showColorPicker =  function(){
@@ -318,8 +324,6 @@ colorPicker.prototype.updateCursor = function(win) {
 		if (win.slider.value <= 63)
 			this.colourSelectCursor.strokeColour = [1,1,1];
 	}
-
-	//this.colourSelectCursor.notify("onDraw");
 };
 
 colorPicker.prototype.bindingKeydown = function(win){
@@ -573,6 +577,12 @@ colorPicker.prototype.RgbToHsb = function(rgb){
 }
 
 colorPicker.prototype.isHex = function(hexArr){
+    if(!hexArr)
+        return false;
+        
+    if(!this.isType(hexArr,"Array")) 
+        return false;
+    
     var arr = ["0","1","2","3","4","5","6","7","8","9","A","B","C","D","E","F"];
     var isHex = true;
     for(var i=0,len = hexArr.length;i<len;i++){
@@ -583,6 +593,87 @@ colorPicker.prototype.isHex = function(hexArr){
         }
     if(hexArr.length != 6) return false;
     return isHex;
+}
+
+
+colorPicker.prototype.isType =  function(content,type){
+    return Object.prototype.toString.call(content) == "[object "+type+"]"
+}
+
+colorPicker.prototype.isRgb =  function(rgbArr){
+    if(!rgbArr) 
+        return false;
+    
+    if(!this.isType(rgbArr,"Array")) 
+        return false;
+    
+    if(rgbArr.length != 3)
+        return false;
+    
+    for(var i =0,len = rgbArr.length;i<len;i++){
+            if(rgbArr[i]>1 || rgbArr[i]<0)
+                return false;
+    }
+        
+    return true;
+}
+
+colorPicker.prototype.isLargeRgb =  function(rgbArr){
+    if(!rgbArr) 
+        return false;
+    
+    if(!this.isType(rgbArr,"Array")) 
+        return false;
+        
+    if(rgbArr.length != 3)
+        return false;
+    
+    for(var i =0,len = rgbArr.length;i<len;i++){
+            if(rgbArr[i]>255 || rgbArr[i]<0)
+                return false;
+    }
+
+    return true;
+}
+
+colorPicker.prototype.isShortHex =  function(hexArr){
+    if(!hexArr)
+        return false;
+        
+    if(!this.isType(hexArr,"Array")) 
+        return false;
+        
+    
+    if(hexArr.length != 3) 
+        return false;
+        
+    var arr = ["0","1","2","3","4","5","6","7","8","9","A","B","C","D","E","F"];
+    var isShortHex = true;
+    for(var i=0,len = hexArr.length;i<len;i++){
+            if(this.arrayIndexOf(arr,hexArr[i]) == false){
+                    isShortHex = false;
+                    break;
+                }
+        }
+        
+    return isShortHex;
+}
+
+colorPicker.prototype.isHsb =  function(hsbArr){
+    if(!hsbArr)
+        return false;
+        
+    if(!this.isType(hsbArr,"Array")) 
+        return false;
+        
+    if(hsbArr.length!=3)   
+        return false; 
+        
+    if(hsbArr[0]>360 || hsbArr[0]<0) return false;
+    if(hsbArr[1]>100 || hsbArr[1]<0) return false;
+    if(hsbArr[2]>100 || hsbArr[2]<0) return false;
+    
+    return true;
 }
 
 colorPicker.prototype.initSetting = function(){
