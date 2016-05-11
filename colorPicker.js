@@ -23,17 +23,46 @@ function colorPicker(inputValue){
 }
 
 colorPicker.prototype.parser =  function(inputValue){
+        if(!inputValue)
+            return [1,1,1];
+            
+        if(this.isRgb(inputValue))
+            return this.parseRgb(inputValue);
+        else if(this.isHex(inputValue))
+            return this.parseHex(inputValue);
+        else if(this.isHsb(inputValue))
+            return this.parseHsb(inputValue);
+        else
+            return [1,1,1];
+}
 
+colorPicker.prototype.isRgb =  function(){
 
-        return inputValue||[1,1,1];
+}
+
+colorPicker.prototype.isHex =  function(){
+
+}
+
+colorPicker.prototype.isHsb =  function(){
+
+}
+
+colorPicker.prototype.parseRgb =  function(){
+
+}
+
+colorPicker.prototype.parseHex =  function(){
+
+}
+
+colorPicker.prototype.parseHsb =  function(){
+
 }
 
 colorPicker.prototype.showColorPicker =  function(){
         var win = this.initWindow();
-        //win.editor.oc.test.notify("onClick");
-        
         win.show();
-
         return this.outputColour;
 }
 
