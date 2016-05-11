@@ -29,12 +29,17 @@ resultColor;
 The 4 editable text areas have shotcut keys:  
 press `↑` and `↓` to add/sub 1 , while with `Shift` to add/sub 10.
 
-## Option
-- Option is specified by `new colorPicker(colorArr)`  
+## Input a default color
+>The default color is specified by `new colorPicker(defaultColor)`
+The default color is to be preselected in the ColorPicker,as RGB,HEX and HSB,or [1,1,1] for the platform default.
 
-|Parameter | Type |Default| Description|
-|:---------|:----:|:-----:|:----------:|
-|colorArr  |Array |[0,0,0]|The default color of colorPicker.Range from [0,0,0] to [1,1,1] |
+|Option   | Type | Description|
+|:--------|:----:|:----------:|
+|RGB      |Array |From [0,0,0] to [1,1,1] |
+|LargeRGB |Array |From [0,0,0] to [255,255,255] |
+|Hex      |String|From "000000" to "FFFFFF" |
+|ShortHex |String|"F7C" which means "FF77CC" |
+|HSB      |Array |From [0,0,0,"hsb"] to [360,100,100,"hsb"]|
 
 ## Screenshot
 #### PS
@@ -50,6 +55,17 @@ press `↑` and `↓` to add/sub 1 , while with `Shift` to add/sub 10.
 >[ESTK](https://raw.githubusercontent.com/Smallpath/AdobeColorPicker/master/_screenshot/ESTK.png)
 
 ## Changelog
+#### v1.4
+- Get the point from colour & Reset the position of cursor
+- Much smoother moving with mouse pressed
+- Support RGB, Hex and HSB in constructor
+- Add support for short hex in hex field
+
+#### v1.3
+- ACP runs much faster than before
+- Reduce 90% file size
+- Fix invalid hex causing crash
+
 #### v1.2
 - No longer require the key-word 'new'
 - Add cursor
