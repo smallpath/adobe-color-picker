@@ -16,15 +16,24 @@
 function colorPicker(inputValue){
     if(!(this instanceof colorPicker))
         return new colorPicker(inputValue)
-    this.userColour = inputValue || [1,1,1];
+    this.userColour = this.parser(inputValue);
     this.outputColour = [1,1,1];
     this.initSetting();
     return this.showColorPicker();
 }
 
+colorPicker.prototype.parser =  function(inputValue){
+
+
+        return inputValue||[1,1,1];
+}
+
 colorPicker.prototype.showColorPicker =  function(){
         var win = this.initWindow();
+        //win.editor.oc.test.notify("onClick");
+        
         win.show();
+
         return this.outputColour;
 }
 
@@ -43,24 +52,41 @@ colorPicker.prototype.initWindow = function(){
 
 	    		var colourCursorGroup = this.colourCursorGroup = colourGroup.add('customBoundedValue',[0,0,262,262]);
 		    		colourCursorGroup.fillColour = [0,0,0,0];
-		    		colourCursorGroup.onDraw = function () {
+
+                 var colourSelectCursor = this.colourSelectCursor = colourCursorGroup.colourSelectCursor = {};
+                        colourSelectCursor.size = [12,12];
+                        colourSelectCursor.strokeWidth = 1;
+                        colourSelectCursor.strokeColour = [0,0,0];
+                        
+                        colourSelectCursor.location = (function(_this){
+                            var hsb = _this.RgbToHsb(_this.userColour);
+                            var angle = hsb[0]; //0-360
+                            var length = hsb[1]/100*130;//0-130
+                            
+                            var point = [length*Math.cos(angle*2*Math.PI/360),length*Math.sin(angle*2*Math.PI/360)];
+                            
+                            return [point[0]+130,130-point[1]]
+                        })(this)
+                    
+                        colourSelectCursor.location = [colourSelectCursor.location[0]-colourSelectCursor.size[0]/2,
+                                                                        colourSelectCursor.location[1]-colourSelectCursor.size[1]/2];
+                        
+                colourCursorGroup.onDraw = function () {
 		                this.graphics.drawOSControl();
 		                this.graphics.newPath();
 		                this.graphics.ellipsePath(0,0,this.size[0],this.size[1]);
 		                this.graphics.fillPath(colourCursorGroup.graphics.newBrush(colourCursorGroup.graphics.BrushType.SOLID_COLOR, colourCursorGroup.fillColour));
-		    		};
-
-            	var colourSelectCursor = this.colourSelectCursor = colourGroup.add('button',[0,0,1,1]);
-		            colourSelectCursor.size = [15,15];
-		            colourSelectCursor.strokeWidth = 1;
-		            colourSelectCursor.strokeColour = [0,0,0];
-
-		        	colourSelectCursor.onDraw = function () {
-		        	    this.graphics.drawOSControl();
+                        
 		                this.graphics.newPath();
-		                this.graphics.ellipsePath(this.strokeWidth/2,this.strokeWidth/2,this.size[0]-this.strokeWidth,this.size[1]-this.strokeWidth);
-		                this.graphics.strokePath(this.graphics.newPen(this.graphics.PenType.SOLID_COLOR, this.strokeColour, this.strokeWidth));
-		        	};
+                        
+		                this.graphics.ellipsePath(this.colourSelectCursor.location[0]+this.colourSelectCursor.strokeWidth/2+1,
+                                                                        this.colourSelectCursor.location[1]+this.colourSelectCursor.strokeWidth/2+1,
+                                                                        this.colourSelectCursor.size[0]-this.colourSelectCursor.strokeWidth,
+                                                                        this.colourSelectCursor.size[1]-this.colourSelectCursor.strokeWidth);
+		                this.graphics.strokePath(this.graphics.newPen(this.graphics.PenType.SOLID_COLOR, 
+                                                                   this.colourSelectCursor.strokeColour, this.colourSelectCursor.strokeWidth));
+		    		};  
+
 
             win.brightGroup = win.add("group");
             win.staticBright = win.brightGroup.add("statictext",undefined,"Bright:");
@@ -95,7 +121,8 @@ colorPicker.prototype.initWindow = function(){
 	                },
                     oc:Group{
                         ok:Button{text:'Ok'},
-                        can:Button{text:'Cancel'}
+                        can:Button{text:'Cancel'},
+                        test:Button{text:'test'},
                     }
                 }""";
                 var editor = win.editor = win.add(pickerRes);
@@ -126,8 +153,23 @@ colorPicker.prototype.initWindow = function(){
                 _this.copyArr(_this.outputColour,_this.preColor);
                 win.close();
             }
+        
 
-        	_this.updateCursor(win);
+          this.updateCursor(win);
+/*
+            var hsb = this.RgbToHsb(this.userColour);
+            var angle = hsb[0]; //0-360
+            var length = hsb[1]/100*130;//0-130
+            
+            var point = [length*Math.cos(angle*2*Math.PI/360),length*Math.sin(angle*2*Math.PI/360)];
+            //$.writeln(point)
+            point = [point[0]+130,130-point[1]];
+            //$.writeln(point)
+
+            this.colourSelectCursor.location = [point[0] - this.colourSelectCursor.size[0]/2, point[1] - this.colourSelectCursor.size[0]/2];
+            this.colourSelectCursor.notify("onDraw");
+            $.writeln(this.colourSelectCursor.location)*/
+
 
             this.setDefaultValue(win, _this.preColor)
 
@@ -164,7 +206,7 @@ colorPicker.prototype.setDefaultValue = function(win, defaultColour){
 
         win.slider.value=hsbHere[2];
         win.editBright.text=hsbHere[2];
-
+        
         this.colourCursorGroup.fillColour[3] = 1 - (hsbHere[2])/100;
         this.colourCursorGroup.notify("onDraw");
 }
@@ -248,7 +290,7 @@ colorPicker.prototype.updateCursor = function(win) {
 			this.colourSelectCursor.strokeColour = [1,1,1];
 	}
 
-	this.colourSelectCursor.notify("onDraw");
+	//this.colourSelectCursor.notify("onDraw");
 };
 
 colorPicker.prototype.bindingKeydown = function(win){
@@ -315,14 +357,14 @@ colorPicker.prototype.bindingKeydown = function(win){
                                                         ]);
 
         _this.colourSelectCursor.location = [point[0] - _this.colourSelectCursor.size[0]/2, point[1] - _this.colourSelectCursor.size[0]/2];
-        _this.colourSelectCursor.notify("onDraw");
+        /*_this.colourSelectCursor.notify("onDraw");*/
         _this.setDefaultValue(win);
         win.editor.gulu.color.notify("onDraw");
     }
 
 
-    this.colourSelectCursor.addEventListener('mouseup', getColor)
-    //this.colourCursorGroup.addEventListener('mouseup', getColor)
+    //this.colourSelectCursor.addEventListener('mouseup', getColor)
+    this.colourCursorGroup.addEventListener('mouseup', getColor)
     this.colourCursorGroup.addEventListener ('mousemove',getColor)
     this.colourCursorGroup.addEventListener ('mousedown',getColor)
 }
