@@ -30,11 +30,12 @@ The 4 editable text areas have shotcut keys:
 press `↑` and `↓` to add/sub 1 , while with `Shift` to add/sub 10.
 
 ## Input a default color
->The default color is specified by `new colorPicker(defaultColor)`
+>The default color is specified by `new colorPicker(defaultColor)`  
+
 The default color is to be preselected in the ColorPicker,as RGB,HEX and HSB,or [1,1,1] for the platform default.
 
 |Option   | Type | Description|
-|:--------|:----:|:----------:|
+|:--------|:----:|:-----------|
 |RGB      |Array |From [0,0,0] to [1,1,1] |
 |LargeRGB |Array |From [0,0,0] to [255,255,255] |
 |Hex      |String|From "000000" to "FFFFFF" |
