@@ -16,16 +16,15 @@
 function colorPicker(inputValue){
     if(!(this instanceof colorPicker))
         return new colorPicker(inputValue)
-    this.initSetting();
     this.userColour = this.parseColor(inputValue);
     this.outputColour = [1,1,1];
+    this.initSetting();
     return this.showColorPicker();
 }
 
 colorPicker.prototype.parseColor =  function(inputValue){
         if(!inputValue)
             return [1,1,1];
-           
             
         if(this.isRgb(inputValue))                   //[0,0,0] - [1,1,1] 
             return this.parseRgb(inputValue);
@@ -39,31 +38,6 @@ colorPicker.prototype.parseColor =  function(inputValue){
             return this.parseHsb(inputValue);
         else
             return [1,1,1];
-}
-
-
-colorPicker.prototype.parseRgb =  function(inputValue){
-    return inputValue;
-}
-
-colorPicker.prototype.parseLargeRgb =  function(inputValue){
-    var arr = [inputValue[0]/255,inputValue[1]/255,inputValue[2]/255];
-    return arr;
-}
-
-colorPicker.prototype.parseHex =  function(inputValue){
-    return this.HexToRgb("0x"+inputValue);
-}
-
-colorPicker.prototype.parseShortHex =  function(inputValue){
-    var hex = "0x"+inputValue[0].toString() + inputValue[0].toString() 
-                            +inputValue[1].toString() +inputValue[1].toString()
-                                +inputValue[2].toString() +inputValue[2].toString();
-    return this.HexToRgb(hex);
-}
-
-colorPicker.prototype.parseHsb =  function(inputValue){
-    return this.parseLargeRgb(this.HsbToRgb (inputValue));
 }
 
 colorPicker.prototype.showColorPicker =  function(){
@@ -157,7 +131,6 @@ colorPicker.prototype.initWindow = function(){
                     oc:Group{
                         ok:Button{text:'Ok'},
                         can:Button{text:'Cancel'},
-                        test:Button{text:'test'},
                     }
                 }""";
                 var editor = win.editor = win.add(pickerRes);
@@ -576,26 +549,6 @@ colorPicker.prototype.RgbToHsb = function(rgb){
         return [Math.round(hsb[0]), Math.round(hsb[1] * 100), Math.round(hsb[2] * 100)];
 }
 
-colorPicker.prototype.isHex = function(hexArr){
-    if(!hexArr)
-        return false;
-        
-    if(!this.isType(hexArr,"Array")) 
-        return false;
-    
-    var arr = ["0","1","2","3","4","5","6","7","8","9","A","B","C","D","E","F"];
-    var isHex = true;
-    for(var i=0,len = hexArr.length;i<len;i++){
-            if(this.arrayIndexOf(arr,hexArr[i]) == false){
-                    isHex = false;
-                    break;
-                }
-        }
-    if(hexArr.length != 6) return false;
-    return isHex;
-}
-
-
 colorPicker.prototype.isType =  function(content,type){
     return Object.prototype.toString.call(content) == "[object "+type+"]"
 }
@@ -636,11 +589,32 @@ colorPicker.prototype.isLargeRgb =  function(rgbArr){
     return true;
 }
 
+
+colorPicker.prototype.isHex = function(hexArr){
+    if(!hexArr)
+        return false;
+        
+    if(!this.isType(hexArr,"String")) 
+        return false;
+    
+    var arr = ["0","1","2","3","4","5","6","7","8","9","A","B","C","D","E","F"];
+    var isHex = true;
+    for(var i=0,len = hexArr.length;i<len;i++){
+            if(this.arrayIndexOf(arr,hexArr[i]) == false){
+                    isHex = false;
+                    break;
+                }
+        }
+    if(hexArr.length != 6) return false;
+    return isHex;
+}
+
+
 colorPicker.prototype.isShortHex =  function(hexArr){
     if(!hexArr)
         return false;
         
-    if(!this.isType(hexArr,"Array")) 
+    if(!this.isType(hexArr,"String")) 
         return false;
         
     
@@ -666,15 +640,62 @@ colorPicker.prototype.isHsb =  function(hsbArr){
     if(!this.isType(hsbArr,"Array")) 
         return false;
         
-    if(hsbArr.length!=3)   
-        return false; 
+    if(hsbArr.length!=4)   
+        return false;   
         
+    if(hsbArr[3] !="hsb") return false;
     if(hsbArr[0]>360 || hsbArr[0]<0) return false;
     if(hsbArr[1]>100 || hsbArr[1]<0) return false;
     if(hsbArr[2]>100 || hsbArr[2]<0) return false;
+
     
     return true;
 }
+
+
+colorPicker.prototype.parseRgb =  function(inputValue){
+    return inputValue;
+}
+
+colorPicker.prototype.parseLargeRgb =  function(inputValue){
+    var arr = [inputValue[0]/255,inputValue[1]/255,inputValue[2]/255];
+    return arr;
+}
+
+colorPicker.prototype.parseHex =  function(inputValue){
+    return this.HexToRgb("0x"+inputValue);
+}
+
+colorPicker.prototype.parseShortHex =  function(inputValue){
+    var hex = "0x"+inputValue[0].toString() + inputValue[0].toString() 
+                            +inputValue[1].toString() +inputValue[1].toString()
+                                +inputValue[2].toString() +inputValue[2].toString();
+    return this.HexToRgb(hex);
+}
+
+colorPicker.prototype.parseHsb =  function(inputValue){
+    var hsb = [inputValue[0],inputValue[1],inputValue[2]];
+    return this.parseLargeRgb(this.HsbToRgb (hsb));
+}
+
+colorPicker.prototype.arrayIndexOf = function(arr,str){
+            for(var i=0,len = arr.length;i<len;i++){
+                    if(arr[i] == str)
+                        return true;
+                }
+            return false;
+        }
+    
+colorPicker.prototype.arraysEqual = function(a, b) {
+              if (a === b) return true;
+              if (a == null || b == null) return false;
+              if (a.length != b.length) return false;
+
+              for (var i = 0; i < a.length; ++i) {
+                if (a[i] !== b[i]) return false;
+              }
+              return true;
+        }
 
 colorPicker.prototype.initSetting = function(){
     this.preColor = this.copyArr([],this.userColour);
@@ -724,25 +745,6 @@ colorPicker.prototype.initSetting = function(){
             this.settingFile.write(xml);
             this.settingFile.close();
             return isOk;
-        }
-    
-    this.arrayIndexOf = function(arr,str){
-            for(var i=0,len = arr.length;i<len;i++){
-                    if(arr[i] == str)
-                        return true;
-                }
-            return false;
-        }
-    
-    this.arraysEqual = function(a, b) {
-              if (a === b) return true;
-              if (a == null || b == null) return false;
-              if (a.length != b.length) return false;
-
-              for (var i = 0; i < a.length; ++i) {
-                if (a[i] !== b[i]) return false;
-              }
-              return true;
         }
 
 }
