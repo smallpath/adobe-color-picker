@@ -389,11 +389,7 @@ colorPicker.prototype.CoreGetColorFromPoint = function(h,s){
     var v = 1;
     if( s == 0 ) {
         v = Math.floor(v*255);
-        return {
-            r:v,
-            g:v,
-            b:v
-            };
+        return [v,v,v];
         }
     var resH = h;
     var condition;
