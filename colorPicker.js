@@ -32,7 +32,7 @@ colorPicker.options = {
         name : "Adobe Color Picker ",
         version : 1.4,
         
-        windowType:"dialog",  // "dialog","palette",Panel
+        windowType:"dialog",  // "dialog","palette" and the reference of Panel
     }
 
 colorPicker.prototype.parseColor =  function(inputValue){
@@ -63,7 +63,7 @@ colorPicker.prototype.showColorPicker =  function(){
         if(!this.isSmallMode)
             return this.outputColour;
         else
-            return win;
+            return {window:win, colorPicker:this};
 }
 
 colorPicker.prototype.initWindow = function(){
@@ -127,10 +127,13 @@ colorPicker.prototype.initWindow = function(){
             win.staticBright = win.brightGroup.add("statictext",undefined,"Bright:");
             win.editBright = win.brightGroup.add("edittext{text:'0',characters:3,justify:'center',active:1}");
             win.slider = win.brightGroup.add("slider",undefined,100,0,100); 
-            if(!isSmallMode)
+            if(!isSmallMode){
                 win.slider.size = "width:160,height:20";
-            else
+                var spacing = 10;
+            }else{
                 win.slider.size = "width:100,height:20";
+                var spacing = 0;
+            }
             var pickerRes =
             """Group{orientation:'column',
                     gulu:Group{
@@ -146,22 +149,23 @@ colorPicker.prototype.initWindow = function(){
                     },
                     colorHolder:Group{orientation:'row',
 	                    colorCol1:Group{orientation:'column',
-	                    	hGroup:Group{spacing:0,hRad:StaticText{text:"H:"},hValue:StaticText{characters:5,justify:"center",text:'0'}},
-	                    	rGroup:Group{spacing:0,rRad:StaticText{text:"R:"},rValue:EditText{characters:4,justify:"center",text:'0',_index:0}}
+	                    	hGroup:Group{spacing:"""+spacing+""",hRad:StaticText{text:"H:"},hValue:StaticText{characters:5,justify:"center",text:'0'}},
+	                    	rGroup:Group{spacing:"""+spacing+""",rRad:StaticText{text:"R:"},rValue:EditText{characters:4,justify:"center",text:'0',_index:0}}
 	                	},
 	                    colorCol2:Group{orientation:'column',
-	                    	sGroup:Group{spacing:0,sRad:StaticText{text:"S:"},sValue:StaticText{characters:5,justify:"center",text:'0'}},
-	                    	gGroup:Group{spacing:0,gRad:StaticText{text:"G:"},gValue:EditText{characters:4,justify:"center",text:'0',_index:1}}
+	                    	sGroup:Group{spacing:"""+spacing+""",sRad:StaticText{text:"S:"},sValue:StaticText{characters:5,justify:"center",text:'0'}},
+	                    	gGroup:Group{spacing:"""+spacing+""",gRad:StaticText{text:"G:"},gValue:EditText{characters:4,justify:"center",text:'0',_index:1}}
 	                	},
 	                    colorCol3:Group{orientation:'column',
-	                    	lGroup:Group{spacing:0,lRad:StaticText{text:"B:"},lValue:StaticText{characters:5,justify:"center",text:'0'}},
-	                    	bGroup:Group{spacing:0,bRad:StaticText{text:"B:"},bValue:EditText{characters:4,justify:"center",text:'0',_index:2}}
+	                    	lGroup:Group{spacing:"""+spacing+""",lRad:StaticText{text:"B:"},lValue:StaticText{characters:5,justify:"center",text:'0'}},
+	                    	bGroup:Group{spacing:"""+spacing+""",bRad:StaticText{text:"B:"},bValue:EditText{characters:4,justify:"center",text:'0',_index:2}}
 	                	},
 	                },
 
                 }""";
                 var editor = win.editor = win.add(pickerRes);
                 if(win.type == "dialog"){
+
                     
                     editor.oc = win.editor.oc = win.add("Group{ok:Button{text:'Ok'},can:Button{text:'Cancel'}}");
                     
