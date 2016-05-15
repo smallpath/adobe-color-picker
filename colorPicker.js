@@ -22,6 +22,13 @@ function colorPicker(inputColour){
     return this.showColorPicker();
 }
 
+colorPicker.options = {
+        name : "Adobe Color Picker",
+        version : 1.4,
+        type:"dialog",  // "dialog","palette"
+        relocation: false
+    }
+
 colorPicker.prototype.parseColor =  function(inputValue){
         if(!inputValue)
             return [1,1,1];
@@ -42,17 +49,31 @@ colorPicker.prototype.parseColor =  function(inputValue){
 
 colorPicker.prototype.showColorPicker =  function(){
         var win = this.initWindow();
-        win.show();
+        if(win.type == "dialog" ||win.type == "palette" )
+            win.show();
+        else if(win.type == "panel")
+            win.layout.layout(true)
         return this.outputColour;
 }
 
 colorPicker.prototype.initWindow = function(){
             var _this = this;
-            var win = new Window("dialog", "Color Picker v1.4", undefined, {
-                maximizeButton: false,
-                minimizeButton: false,
-                closeButton: false
-            });
+            var type = colorPicker.options["type"];
+            if(type == "dialog"){
+                    var win = new Window("dialog", colorPicker.options["name"] + colorPicker.options["version"], undefined, {
+                        maximizeButton: false,
+                        minimizeButton: false,
+                        closeButton:false
+                    });
+            }else if(type=="palette"){
+                    var win = new Window("palette", colorPicker.options["name"] + colorPicker.options["version"], undefined, {
+                            maximizeButton: false,
+                            minimizeButton: false,
+                        });
+            }else if(type instanceof Panel){
+                     var win = type;
+            }
+
 
             var colourGroup = win.add('group');
             	colourGroup.orientation = "stack";
@@ -117,12 +138,23 @@ colorPicker.prototype.initWindow = function(){
 	                    	bGroup:Group{bRad:StaticText{text:"B:"},bValue:EditText{characters:4,justify:"center",text:'0',_index:2}}
 	                	},
 	                },
-                    oc:Group{
-                        ok:Button{text:'Ok'},
-                        can:Button{text:'Cancel'},
-                    }
+
                 }""";
                 var editor = win.editor = win.add(pickerRes);
+                if(win.type == "dialog"){
+                    
+                    editor.oc = win.editor.oc = win.add("Group{ok:Button{text:'Ok'},can:Button{text:'Cancel'}}");
+                    
+                        editor.oc.ok.onClick = function(){
+                            win.close();
+                        }
+
+                        editor.oc.can.onClick = function(){
+                            _this.copyArr(_this.outputColour,_this.inputColour);
+                            win.close();
+                        }
+                    
+                    }
 
             var firstRun = true;
 
@@ -135,14 +167,9 @@ colorPicker.prototype.initWindow = function(){
                 gfxs.fillPath(gfxs.newBrush (gfxs.BrushType.SOLID_COLOR, targetColour));
             };
 
-	        editor.oc.ok.onClick = function(){
-                win.close();
-            }
 
-            editor.oc.can.onClick = function(){
-                _this.copyArr(_this.outputColour,_this.inputColour);
-                win.close();
-            }
+
+
         
             this.updateCursor(win);
 
