@@ -56,6 +56,15 @@ The default color is to be preselected in the ColorPicker,as RGB,HEX and HSB,or 
 >[ESTK](https://raw.githubusercontent.com/Smallpath/AdobeColorPicker/master/_screenshot/ESTK.png)
 
 ## Changelog
+#### v1.6
+- Back color wheel image to origin to avoid showing issue on Mac
+- Add static member for colorPicker function
+- Add options in constructor
+- Add small mode for palette and panel windows 
+
+#### v1.5
+- Fix crash when center point is clicked
+
 #### v1.4
 - Get the point from colour & Reset the position of cursor
 - Much smoother moving with mouse pressed
