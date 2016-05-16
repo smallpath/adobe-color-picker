@@ -30,7 +30,7 @@ function colorPicker(inputColour,options){
 
 colorPicker.options = {
         name : "Adobe Color Picker ",
-        version : 1.4,
+        version : 1.6,
         
         windowType:"dialog",  // "dialog","palette" and the reference of Panel
     }
