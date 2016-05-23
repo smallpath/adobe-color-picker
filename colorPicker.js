@@ -60,10 +60,15 @@ colorPicker.prototype.showColorPicker =  function(){
         else if(win.type == "panel")
             win.layout.layout(true);
             
-        if(!this.isSmallMode)
+        if(!this.isSmallMode){
+            this.outputColour.hex = colorPicker.prototype.RgbToHex(this.outputColour);
+            this.outputColour.hsb = colorPicker.prototype.RgbToHsb(this.outputColour);
+            this.outputColour.rgb = colorPicker.prototype.copyArr([],this.outputColour);
+            
             return this.outputColour;
-        else
+        }else{
             return {window:win, colorPicker:this};
+        }
 }
 
 colorPicker.prototype.initWindow = function(){
