@@ -1,6 +1,6 @@
 ﻿;(function(){
 /*
- *  ColorPicker v1.4 for Adobe scripting.
+ *  ColorPicker v1.7 for Adobe scripting.
  *  2016-5-11
  *
  *  By:   smallpath
