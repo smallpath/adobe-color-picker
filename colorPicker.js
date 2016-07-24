@@ -137,7 +137,7 @@ colorPicker.prototype.initWindow = function(){
             win.slider = win.brightGroup.add("slider",undefined,100,0,100); 
             if(!isSmallMode){
                 win.slider.size = "width:160,height:20";
-                var spacing = 5;
+                var spacing = 10;
             }else{
                 win.slider.size = "width:100,height:20";
                 win.brightGroup.spacing = 2;
