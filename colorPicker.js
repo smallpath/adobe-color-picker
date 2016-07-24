@@ -148,12 +148,14 @@ colorPicker.prototype.initWindow = function(){
             if(!isSmallMode){
                 win.slider.size = "width:160,height:20";
                 var spacing = 10;
+                var character = 4;
             }else{
                 win.slider.size = "width:100,height:20";
                 win.brightGroup.spacing = 2;
                 win.spacing = 5;
                 win.margins = 2;
                 var spacing = 0;
+                var character = 3;
             }
             var pickerRes =
             """Group{orientation:'column',
@@ -171,16 +173,16 @@ colorPicker.prototype.initWindow = function(){
                     },
                     colorHolder:Group{orientation:'row',
 	                    colorCol1:Group{orientation:'column',
-	                    	hGroup:Group{spacing:"""+spacing+""",hRad:StaticText{text:"H:"},hValue:EditText{characters:4,justify:"center",text:'0',_index:0}},
-	                    	rGroup:Group{spacing:"""+spacing+""",rRad:StaticText{text:"R:"},rValue:EditText{characters:4,justify:"center",text:'0',_index:0}}
+	                    	hGroup:Group{spacing:"""+spacing+""",hRad:StaticText{text:"H:"},hValue:EditText{characters:"""+character+""",justify:"center",text:'0',_index:0}},
+	                    	rGroup:Group{spacing:"""+spacing+""",rRad:StaticText{text:"R:"},rValue:EditText{characters:"""+character+""",justify:"center",text:'0',_index:0}}
 	                	},
 	                    colorCol2:Group{orientation:'column',
-	                    	sGroup:Group{spacing:"""+spacing+""",sRad:StaticText{text:"S:"},sValue:EditText{characters:4,justify:"center",text:'0',_index:1}},
-	                    	gGroup:Group{spacing:"""+spacing+""",gRad:StaticText{text:"G:"},gValue:EditText{characters:4,justify:"center",text:'0',_index:1}}
+	                    	sGroup:Group{spacing:"""+spacing+""",sRad:StaticText{text:"S:"},sValue:EditText{characters:"""+character+""",justify:"center",text:'0',_index:1}},
+	                    	gGroup:Group{spacing:"""+spacing+""",gRad:StaticText{text:"G:"},gValue:EditText{characters:"""+character+""",justify:"center",text:'0',_index:1}}
 	                	},
 	                    colorCol3:Group{orientation:'column',
-	                    	lGroup:Group{spacing:"""+spacing+""",lRad:StaticText{text:"B:"},lValue:EditText{characters:4,justify:"center",text:'0',_index:2}},
-	                    	bGroup:Group{spacing:"""+spacing+""",bRad:StaticText{text:"B:"},bValue:EditText{characters:4,justify:"center",text:'0',_index:2}}
+	                    	lGroup:Group{spacing:"""+spacing+""",lRad:StaticText{text:"B:"},lValue:EditText{characters:"""+character+""",justify:"center",text:'0',_index:2}},
+	                    	bGroup:Group{spacing:"""+spacing+""",bRad:StaticText{text:"B:"},bValue:EditText{characters:"""+character+""",justify:"center",text:'0',_index:2}}
 	                	},
 	                },
 
