@@ -1,7 +1,7 @@
 ﻿;(function(){
 /*
  *  ColorPicker v1.7 for Adobe scripting.
- *  2016-5-11
+ *  2016-5-11 -> 2016-7-24
  *
  *  By:   smallpath
  *  Email:   smallpath2013@gmail.com
@@ -20,6 +20,8 @@ function colorPicker(inputColour,options){
     this.options = {
         name : "Adobe Color Picker ",
         version : 1.7,
+        shouldUpdateCursor: false,
+        backupLocation : [],
 
         windowType:"dialog",  // "dialog","palette" and the reference of Panel
     }
@@ -47,7 +49,7 @@ colorPicker.parseColor = function(inputValue){
             return colorPicker.parseHex(inputValue);
         else if(colorPicker.isShortHex(inputValue))     //FFF
             return colorPicker.parseShortHex(inputValue);
-        else if(colorPicker.isHsb(inputValue))             //[0,0,0] - [360,100,100]
+        else if(colorPicker.isHsb(inputValue))             //[0,0,0,'hsb'] - [360,100,100,'hsb']
             return colorPicker.parseHsb(inputValue);
         else
             return [1,1,1];
@@ -161,16 +163,16 @@ colorPicker.prototype.initWindow = function(){
                     },
                     colorHolder:Group{orientation:'row',
 	                    colorCol1:Group{orientation:'column',
-	                    	hGroup:Group{spacing:"""+spacing+""",hRad:StaticText{text:"H:"},hValue:StaticText{characters:4,justify:"center",text:'0'}},
-	                    	rGroup:Group{spacing:"""+spacing+""",rRad:StaticText{text:"R:"},rValue:EditText{characters:3,justify:"center",text:'0',_index:0}}
+	                    	hGroup:Group{spacing:"""+spacing+""",hRad:StaticText{text:"H:"},hValue:EditText{characters:4,justify:"center",text:'0',_index:0}},
+	                    	rGroup:Group{spacing:"""+spacing+""",rRad:StaticText{text:"R:"},rValue:EditText{characters:4,justify:"center",text:'0',_index:0}}
 	                	},
 	                    colorCol2:Group{orientation:'column',
-	                    	sGroup:Group{spacing:"""+spacing+""",sRad:StaticText{text:"S:"},sValue:StaticText{characters:4,justify:"center",text:'0'}},
-	                    	gGroup:Group{spacing:"""+spacing+""",gRad:StaticText{text:"G:"},gValue:EditText{characters:3,justify:"center",text:'0',_index:1}}
+	                    	sGroup:Group{spacing:"""+spacing+""",sRad:StaticText{text:"S:"},sValue:EditText{characters:4,justify:"center",text:'0',_index:1}},
+	                    	gGroup:Group{spacing:"""+spacing+""",gRad:StaticText{text:"G:"},gValue:EditText{characters:4,justify:"center",text:'0',_index:1}}
 	                	},
 	                    colorCol3:Group{orientation:'column',
-	                    	lGroup:Group{spacing:"""+spacing+""",lRad:StaticText{text:"B:"},lValue:StaticText{characters:4,justify:"center",text:'0'}},
-	                    	bGroup:Group{spacing:"""+spacing+""",bRad:StaticText{text:"B:"},bValue:EditText{characters:3,justify:"center",text:'0',_index:2}}
+	                    	lGroup:Group{spacing:"""+spacing+""",lRad:StaticText{text:"B:"},lValue:EditText{characters:4,justify:"center",text:'0',_index:2}},
+	                    	bGroup:Group{spacing:"""+spacing+""",bRad:StaticText{text:"B:"},bValue:EditText{characters:4,justify:"center",text:'0',_index:2}}
 	                	},
 	                },
 
@@ -230,11 +232,13 @@ colorPicker.prototype.setDefaultValue = function(win){
         pi.colorHolder.colorCol1.rGroup.rValue.text=Math.round(startColour[0]*255);
         pi.colorHolder.colorCol2.gGroup.gValue.text=Math.round(startColour[1]*255);
         pi.colorHolder.colorCol3.bGroup.bValue.text=Math.round(startColour[2]*255);
+
         var hsbHere= colorPicker.RgbToHsb([
-                                        Math.round(startColour[0]*255),
-                                        Math.round(startColour[1]*255),
-                                        Math.round(startColour[2]*255)
+                                        startColour[0]*255,
+                                        startColour[1]*255,
+                                        startColour[2]*255
                                     ]);
+                                    
 
         pi.colorHolder.colorCol1.hGroup.hValue.text=hsbHere[0];
         pi.colorHolder.colorCol2.sGroup.sValue.text=hsbHere[1];
@@ -250,15 +254,52 @@ colorPicker.prototype.setDefaultValue = function(win){
 colorPicker.prototype.bindingHandler =  function(win){
            var _this = this;
 
+          win.editor.colorHolder.colorCol1.hGroup.hValue.onChange =
+          win.editor.colorHolder.colorCol2.sGroup.sValue.onChange =
+          win.editor.colorHolder.colorCol3.lGroup.lValue.onChange = function(){
+                    _this.options.backupLocation.length = 0;
+                    this.text=Math.round(this.text);
+
+                    if(this._index ==0 ){
+                        if( this.text<0 || this.text>360 || isNaN(this.text)==true ){
+                                this.text= colorPicker.RgbToHsb([
+                                                                                    _this.outputColour[0]*255,
+                                                                                    _this.outputColour[1]*255,
+                                                                                    _this.outputColour[2]*255,
+                                                                                ])[this._index];
+                       }
+                    }else{
+                        if( this.text<0 || this.text>100 || isNaN(this.text)==true ){
+                                this.text= colorPicker.RgbToHsb([
+                                                                                    _this.outputColour[0]*255,
+                                                                                    _this.outputColour[1]*255,
+                                                                                    _this.outputColour[2]*255,
+                                                                                ])[this._index];
+                       }
+                    }
+                    var hsbArr = [
+                                          Math.round(win.editor.colorHolder.colorCol1.hGroup.hValue.text),
+                                          Math.round(win.editor.colorHolder.colorCol2.sGroup.sValue.text),
+                                          Math.round(win.editor.colorHolder.colorCol3.lGroup.lValue.text)
+                                        ];
+
+                    var rgbArr = colorPicker.HsbToRgb (hsbArr);
+                    var hexStr = colorPicker.RgbToHex ([rgbArr[0]/255,rgbArr[1]/255,rgbArr[2]/255]);
+                    win.editor.gulu.uni.unicode.text = hexStr;
+                    win.editor.gulu.uni.unicode.notify("onChange");
+                     
+          }
+
 
            win.editor.colorHolder.colorCol1.rGroup.rValue.onChange  =
            win.editor.colorHolder.colorCol2.gGroup.gValue.onChange =
            win.editor.colorHolder.colorCol3.bGroup.bValue.onChange = function (){
+                    _this.options.backupLocation.length = 0;
                     this.text=Math.round(this.text);
 
                     if( this.text<0 || this.text>255 || isNaN(this.text)==true ){
-                            this.text=Math.round(_this.outputColour[0]*255);
-                       }
+                            this.text=Math.round(_this.outputColour[this._index]*255);
+                   }
 
                     if(this._index ==0)
                         win.editor.gulu.uni.unicode.text= colorPicker.RgbToHex ([this.text/255,_this.outputColour[1],_this.outputColour[2]]);
@@ -271,6 +312,7 @@ colorPicker.prototype.bindingHandler =  function(win){
                }
 
            win.editBright.onChange = win.editBright.onChanging = function () {
+                    _this.options.backupLocation.length = 0;
            		if (this.text < 0)
            			this.text = 0;
            		if (this.text > 100)
@@ -279,6 +321,8 @@ colorPicker.prototype.bindingHandler =  function(win){
            			this.text = 100;
 
            		win.slider.value = parseInt(this.text);
+                    if(isNaN(win.slider.value))
+                        return;
            		win.slider.notify('onChange');
            };
 
@@ -289,14 +333,42 @@ colorPicker.prototype.bindingHandler =  function(win){
                                                             Math.round(win.editor.colorHolder.colorCol2.sGroup.sValue.text),
                                                             Math.round(this.value)
                                                         ]);
+                    if(this.value != 0){
+                        if(_this.options.backupLocation.length != 0 && _this.options.shouldUpdateCursor == true){
+                            _this.getColor({
+                                    type:"mouseup",
+                                    clientX: _this.options.backupLocation[0]+6,
+                                    clientY: _this.options.backupLocation[1]+6,
+                            });
+                            _this.options.backupLocation.length = 0;
+                            _this.colourCursorGroup.fillColour[3] = 1 - (this.value)/100;
+                            _this.colourCursorGroup.notify("onDraw");
+                            return;
+                        }
+                    }                
+                                             
                     colorPicker.copyArr(_this.outputColour,[thisColor[0]/255,thisColor[1]/255,thisColor[2]/255]);
-                    
+
                     _this.setDefaultValue(win);
                     _this.notifyColor(win);
                 	_this.updateCursor(win);
                     
+                    _this.setCursorLocation (_this.outputColour);
+
+                    if(this.value == 0){
+                        _this.options.shouldUpdateCursor = true;
+                    }else{
+                        _this.options.shouldUpdateCursor = false;
+                    }
+                            
+                            
+                    if(_this.options.backupLocation.length == 0){
+                        colorPicker.copyArr(_this.options.backupLocation,_this.colourSelectCursor.location);
+                    }
+
                     _this.colourCursorGroup.fillColour[3] = 1 - (this.value)/100;
                     _this.colourCursorGroup.notify("onDraw");
+                     
                }
 
             win.editor.gulu.uni.unicode.onChange= function(){
@@ -335,8 +407,8 @@ colorPicker.prototype.setCursorLocation= function(inputColor){
      this.colourSelectCursor.location = (function(_this){
             var hsb = colorPicker.RgbToHsb(inputColor);  
             hsb = colorPicker.convertHsbToKulerHsb(hsb);
-            var angle = hsb[0]; 
-            var length = hsb[1]/100*_this.size;
+            var angle = Math.round(hsb[0]); 
+            var length = Math.round(hsb[1]/100*_this.size);
                             
             var point = [length*Math.cos(angle*2*Math.PI/360),length*Math.sin(angle*2*Math.PI/360)];
 
@@ -380,7 +452,9 @@ colorPicker.prototype.bindingKeydown = function(win){
 
     var leftPressed = false;
 
-    var getColor = function (k) {
+    var getColor = this.getColor = function (k) {
+        _this.options.backupLocation.length = 0;
+        
         if(k.type == "mouseup"){
                 leftPressed = false;
         }else if(k.type == "mousemove"){
@@ -392,9 +466,8 @@ colorPicker.prototype.bindingKeydown = function(win){
         var point = [k.clientX, k.clientY];
         if(!_this.isInCircle(point)) return;
 
-
         var thisColor = _this.getColorFromPoint(point);
-		thisColor = colorPicker.RgbToHsb(thisColor)
+        thisColor = colorPicker.RgbToHsb(thisColor);
         thisColor[2] = win.slider.value;
         thisColor = colorPicker.HsbToRgb(thisColor);
 
@@ -403,8 +476,7 @@ colorPicker.prototype.bindingKeydown = function(win){
                                             thisColor[1]/255,
                                             thisColor[2]/255
         ]);
-
-        _this.colourSelectCursor.location = [point[0] - _this.colourSelectCursor.size[0]/2, point[1] - _this.colourSelectCursor.size[0]/2];
+        _this.setCursorLocation (_this.outputColour);
         _this.setDefaultValue(win);
         win.editor.gulu.color.notify("onDraw");
     }
@@ -552,11 +624,10 @@ colorPicker.HsbToRgb =  function(hsb){
 }
 
 colorPicker.RgbToHsb = function(rgb){
+        rgb = colorPicker.parseColor (rgb);
+        rgb = [rgb[0]*255,rgb[1]*255,rgb[2]*255]
         var hsb = [];
-        var rearranged=[];
-        for(var i=0;i<3;i++){
-            rearranged.push(rgb[i]);
-            }
+        var rearranged=rgb.slice(0);
         var maxIndex = 0;
         var minIndex = 0;
         var tmp;
@@ -567,7 +638,7 @@ colorPicker.RgbToHsb = function(rgb){
             if (rearranged[0] == rgb[i]) minIndex = i;
             if (rearranged[2] == rgb[i]) maxIndex = i;
         }
-        if(rearranged[2]!=0){
+        if(rearranged[2] !=0 ){
             hsb[2] = rearranged[2] / 255;
             hsb[1] = 1 - rearranged[0] / rearranged[2];
             if(hsb[1]!=0){
