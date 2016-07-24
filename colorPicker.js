@@ -1,6 +1,6 @@
 ﻿;(function(){
 /*
- *  ColorPicker v1.7 for Adobe scripting.
+ *  ColorPicker v2.0 for Adobe scripting.
  *  2016-5-11 -> 2016-7-24
  *
  *  By:   smallpath
@@ -19,7 +19,7 @@ function colorPicker(inputColour,options){
 
     this.options = {
         name : "Adobe Color Picker ",
-        version : 1.7,
+        version : "v2.0",
         shouldUpdateCursor: false,
         backupLocation : [],
 
@@ -57,11 +57,19 @@ colorPicker.parseColor = function(inputValue){
 
 colorPicker.prototype.showColorPicker =  function(){
         var win = this.initWindow();
-        if(win.type == "dialog" ||win.type == "palette" )
+        if(win.type == "dialog" ||win.type == "palette" ){
+            if(this.haveSetting ("location")){
+                win.location = this.getSetting ("location").split(",");
+                if(win.location.length != 2)
+                    win.center();
+                else if(win.location[0]<0 || win.location[1]<0)
+                    win.center();
+            } 
             win.show();
-        else if(win.type == "panel")
+            this.saveSetting ("location", win.location);
+        }else if(win.type == "panel"){
             win.layout.layout(true);
-            
+        }
         if(!this.isSmallMode){
             this.outputColour.hex = colorPicker.RgbToHex(this.outputColour);
             this.outputColour.hsb = colorPicker.RgbToHsb(this.outputColour);
