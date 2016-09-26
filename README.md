@@ -56,6 +56,16 @@ The default color is to be preselected in the ColorPicker,as RGB,HEX and HSB,or 
 >[ESTK](https://raw.githubusercontent.com/Smallpath/AdobeColorPicker/master/_screenshot/ESTK.png)
 
 ## Changelog
+#### v2.0
+- Fix #12 
+- Fix #11 
+- Reduce 20% file size
+- Move prototype attr/method to function native attr/method
+- Make HSB field editable
+- Remember the location where ACP is closed
+- Remember the anchor location when bright went to 0
+- Fix error when bright field is NaN
+
 #### v1.6
 - Back color wheel image to origin to avoid showing issue on Mac
 - Add static member for colorPicker function
