@@ -157,37 +157,92 @@ colorPicker.prototype.initWindow = function(){
                 var spacing = 0;
                 var character = 3;
             }
-            var pickerRes =
-            """Group{orientation:'column',
-                    gulu:Group{
-                        uni:Group{
-                            spacing:"""+spacing+""",
-                        	Ed:StaticText{text:"#"},
-                        	unicode:EditText{characters:6,justify:"center",text:'FF0000'}
-                        },
-                        color:Custom {
-                            type: 'customBoundedValue',
-                            text:'Redraw original image',
-                            size:[80,25]
-                        }
-                    },
-                    colorHolder:Group{orientation:'row',
-	                    colorCol1:Group{orientation:'column',
-	                    	hGroup:Group{spacing:"""+spacing+""",hRad:StaticText{text:"H:"},hValue:EditText{characters:"""+character+""",justify:"center",text:'0',_index:0}},
-	                    	rGroup:Group{spacing:"""+spacing+""",rRad:StaticText{text:"R:"},rValue:EditText{characters:"""+character+""",justify:"center",text:'0',_index:0}}
-	                	},
-	                    colorCol2:Group{orientation:'column',
-	                    	sGroup:Group{spacing:"""+spacing+""",sRad:StaticText{text:"S:"},sValue:EditText{characters:"""+character+""",justify:"center",text:'0',_index:1}},
-	                    	gGroup:Group{spacing:"""+spacing+""",gRad:StaticText{text:"G:"},gValue:EditText{characters:"""+character+""",justify:"center",text:'0',_index:1}}
-	                	},
-	                    colorCol3:Group{orientation:'column',
-	                    	lGroup:Group{spacing:"""+spacing+""",lRad:StaticText{text:"B:"},lValue:EditText{characters:"""+character+""",justify:"center",text:'0',_index:2}},
-	                    	bGroup:Group{spacing:"""+spacing+""",bRad:StaticText{text:"B:"},bValue:EditText{characters:"""+character+""",justify:"center",text:'0',_index:2}}
-	                	},
-	                },
 
-                }""";
-                var editor = win.editor = win.add(pickerRes);
+
+            var editor = win.add('group');
+                editor.orientation = 'column';
+
+                editor.gulu = editor.add('group');
+
+                    editor.gulu.uni = editor.gulu.add('group');
+                    editor.gulu.uni.spacing = spacing;
+
+                        editor.gulu.uni.Ed = editor.gulu.uni.add('statictext', undefined, '#');
+                        editor.gulu.uni.unicode = editor.gulu.uni.add('edittext', undefined, 'FF0000')
+                        editor.gulu.uni.unicode.characters = 6;
+                        editor.gulu.uni.unicode.justify = 'center';
+
+                    editor.gulu.color = editor.gulu.add('customBoundedValue', undefined, 'Redraw original image');
+                    editor.gulu.color.size = [80, 25];
+
+                editor.colorHolder = editor.add('group');
+                editor.colorHolder.orientation = 'row';
+
+                    editor.colorHolder.colorCol1 = editor.colorHolder.add('group');
+                    editor.colorHolder.colorCol1.orientation = 'column';
+
+                        editor.colorHolder.colorCol1.hGroup = editor.colorHolder.colorCol1.add('group');
+                        editor.colorHolder.colorCol1.hGroup.spacing = spacing;
+
+                            editor.colorHolder.colorCol1.hGroup.hRad = editor.colorHolder.colorCol1.hGroup.add('statictext', undefined, 'H:');
+                            editor.colorHolder.colorCol1.hGroup.hValue = editor.colorHolder.colorCol1.hGroup.add('edittext', undefined, '0');
+                            editor.colorHolder.colorCol1.hGroup.hValue.characters = character;
+                            editor.colorHolder.colorCol1.hGroup.hValue.justify = 'center';
+                            editor.colorHolder.colorCol1.hGroup.hValue._index = 0;
+
+                        editor.colorHolder.colorCol1.rGroup = editor.colorHolder.colorCol1.add('group');
+                        editor.colorHolder.colorCol1.rGroup.spacing = spacing;
+
+                            editor.colorHolder.colorCol1.rGroup.rRad = editor.colorHolder.colorCol1.rGroup.add('statictext', undefined, 'R:');
+                            editor.colorHolder.colorCol1.rGroup.rValue = editor.colorHolder.colorCol1.rGroup.add('edittext', undefined, '0');
+                            editor.colorHolder.colorCol1.rGroup.rValue.characters = character;
+                            editor.colorHolder.colorCol1.rGroup.rValue.justify = 'center';
+                            editor.colorHolder.colorCol1.rGroup.rValue._index = 0;
+
+                    editor.colorHolder.colorCol2 = editor.colorHolder.add('group');
+                    editor.colorHolder.colorCol2.orientation = 'column';
+
+                        editor.colorHolder.colorCol2.sGroup = editor.colorHolder.colorCol2.add('group');
+                        editor.colorHolder.colorCol2.sGroup.spacing = spacing;
+
+                            editor.colorHolder.colorCol2.sGroup.sRad = editor.colorHolder.colorCol2.sGroup.add('statictext', undefined, 'S:');
+                            editor.colorHolder.colorCol2.sGroup.sValue = editor.colorHolder.colorCol2.sGroup.add('edittext', undefined, '0');
+                            editor.colorHolder.colorCol2.sGroup.sValue.characters = character;
+                            editor.colorHolder.colorCol2.sGroup.sValue.justify = 'center';
+                            editor.colorHolder.colorCol2.sGroup.sValue._index = 1;
+
+                        editor.colorHolder.colorCol2.gGroup = editor.colorHolder.colorCol2.add('group');
+                        editor.colorHolder.colorCol2.gGroup.spacing = spacing;
+
+                            editor.colorHolder.colorCol2.gGroup.gRad = editor.colorHolder.colorCol2.gGroup.add('statictext', undefined, 'G:');
+                            editor.colorHolder.colorCol2.gGroup.gValue = editor.colorHolder.colorCol2.gGroup.add('edittext', undefined, '0');
+                            editor.colorHolder.colorCol2.gGroup.gValue.characters = character;
+                            editor.colorHolder.colorCol2.gGroup.gValue.justify = 'center';
+                            editor.colorHolder.colorCol2.gGroup.gValue._index = 1;
+
+                    editor.colorHolder.colorCol3 = editor.colorHolder.add('group');
+                    editor.colorHolder.colorCol3.orientation = 'column';
+
+                        editor.colorHolder.colorCol3.lGroup = editor.colorHolder.colorCol3.add('group');
+                        editor.colorHolder.colorCol3.lGroup.spacing = spacing;
+
+                            editor.colorHolder.colorCol3.lGroup.lRad = editor.colorHolder.colorCol3.lGroup.add('statictext', undefined, 'B:');
+                            editor.colorHolder.colorCol3.lGroup.lValue = editor.colorHolder.colorCol3.lGroup.add('edittext', undefined, '0');
+                            editor.colorHolder.colorCol3.lGroup.lValue.characters = character;
+                            editor.colorHolder.colorCol3.lGroup.lValue.justify = 'center';
+                            editor.colorHolder.colorCol3.lGroup.lValue._index = 2;
+
+                        editor.colorHolder.colorCol3.bGroup = editor.colorHolder.colorCol3.add('group');
+                        editor.colorHolder.colorCol3.bGroup.spacing = spacing;
+
+                            editor.colorHolder.colorCol3.bGroup.bRad = editor.colorHolder.colorCol3.bGroup.add('statictext', undefined, 'B:');
+                            editor.colorHolder.colorCol3.bGroup.bValue = editor.colorHolder.colorCol3.bGroup.add('edittext', undefined, '0');
+                            editor.colorHolder.colorCol3.bGroup.bValue.characters = character;
+                            editor.colorHolder.colorCol3.bGroup.bValue.justify = 'center';
+                            editor.colorHolder.colorCol3.bGroup.bValue._index = 2;
+
+
+                win.editor = editor;
                 if(win.type == "dialog"){
 
                     
